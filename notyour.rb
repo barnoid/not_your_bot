@@ -22,7 +22,7 @@ def article(word)
 end
 
 def get_cn_edges(word)
-	cn = JSON.parse(open("http://api.conceptnet.io/c/en/#{word}").read)
+	cn = JSON.parse(open("http://api.conceptnet.io/c/en/#{word.gsub(' ', '_')}").read)
 	#puts JSON.pretty_generate(cn)
 	return cn['edges']
 end
@@ -34,7 +34,7 @@ def parse_edges(edges, thing)
 
 		#puts "#{edge['rel']['@id']} #{edge['start']['@id']} #{edge['end']['@id']} - #{edge['start']['label']} #{edge['rel']['label']} #{edge['end']['label']}"
 
-		if edge['start']['@id'].match(/\/c\/en\/#{thing}(\/n)?/) then
+		if edge['start']['@id'].match(/\/c\/en\/#{thing.gsub(' ', '_')}(\/n)?/) then
 			# relationship of our thing to something else
 			case edge['rel']['@id']
 			when '/r/IsA'
@@ -60,7 +60,7 @@ def parse_edges(edges, thing)
 			when '/r/HasA'
 				yourman << "has #{edge['end']['label']}"
 			end
-		elsif edge['end']['@id'].match(/\/c\/en\/#{thing}(\/n)?/) then
+		elsif edge['end']['@id'].match(/\/c\/en\/#{thing.gsub(' ', '_')}(\/n)?/) then
 			# relationship of something else to our thing
 			case edge['rel']['@id']
 			when '/r/IsA'
@@ -86,7 +86,11 @@ lines = []
 try = 0
 while try < TRIES
 	begin
-		thing = pick_word
+		if ARGV.empty? then
+			thing = pick_word
+		else
+			thing = ARGV[0]
+		end
 		edges = get_cn_edges(thing)
 		lines = parse_edges(edges, thing)
 	rescue => e
