@@ -3,6 +3,12 @@
 require 'json'
 require 'open-uri'
 
+@test = false
+if ARGV[0] == '-t' then
+	@test = true
+	ARGV.shift
+end
+
 # Number of time to retry on failure
 TRIES = 4
 
@@ -36,7 +42,7 @@ def parse_edges(edges, thing)
 
 	edges.each do |edge|
 
-		#puts "#{edge['rel']['@id']} #{edge['start']['@id']} #{edge['end']['@id']} - #{edge['start']['label']} #{edge['rel']['label']} #{edge['end']['label']}"
+		puts "#{edge['rel']['@id']} #{edge['start']['@id']} #{edge['end']['@id']} - #{edge['start']['label']} #{edge['rel']['label']} #{edge['end']['label']}" if @test
 
 		if edge['start']['@id'].match(/\/c\/en\/#{clean(thing)}(\/n)?/) then
 			# relationship of our thing to something else
@@ -123,8 +129,12 @@ if lines.empty? then
 	exit 1
 end
 
-out  = "Ladies, if your man:\n\n"
-out += lines.uniq.sample(5).map{ |s| "- #{s.downcase}" }.join("\n")
-out += "\n\nHe's not your man. He's #{article(thing)}."
+if @test then
+	out = lines.map{ |s| "- #{s.downcase}" }.join("\n")
+else
+	out  = "Ladies, if your man:\n\n"
+	out += lines.uniq.sample(5).map{ |s| "- #{s.downcase}" }.join("\n")
+	out += "\n\nHe's not your man. He's #{article(thing)}."
+end
 
 puts out
