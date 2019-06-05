@@ -59,6 +59,8 @@ def parse_edges(edges, thing)
 				yourman << "is part of #{edge['end']['label']}"
 			when '/r/HasA'
 				yourman << "has #{edge['end']['label']}"
+			when '/r/ReceivesAction'
+				yourman << "can be #{edge['end']['label']}"
 			end
 		elsif edge['end']['@id'].match(/\/c\/en\/#{thing.gsub(' ', '_')}(\/n)?/) then
 			# relationship of something else to our thing
