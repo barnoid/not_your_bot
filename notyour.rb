@@ -21,8 +21,12 @@ def article(word)
 	return word
 end
 
+def clean(word)
+	word.gsub(/[- ]/, '_')
+end
+
 def get_cn_edges(word)
-	cn = JSON.parse(open("http://api.conceptnet.io/c/en/#{word.gsub(' ', '_')}").read)
+	cn = JSON.parse(open("http://api.conceptnet.io/c/en/#{clean(word)}").read)
 	#puts JSON.pretty_generate(cn)
 	return cn['edges']
 end
@@ -34,7 +38,7 @@ def parse_edges(edges, thing)
 
 		#puts "#{edge['rel']['@id']} #{edge['start']['@id']} #{edge['end']['@id']} - #{edge['start']['label']} #{edge['rel']['label']} #{edge['end']['label']}"
 
-		if edge['start']['@id'].match(/\/c\/en\/#{thing.gsub(' ', '_')}(\/n)?/) then
+		if edge['start']['@id'].match(/\/c\/en\/#{clean(thing)}(\/n)?/) then
 			# relationship of our thing to something else
 			case edge['rel']['@id']
 			when '/r/IsA'
@@ -62,7 +66,7 @@ def parse_edges(edges, thing)
 			when '/r/ReceivesAction'
 				yourman << "can be #{edge['end']['label']}"
 			end
-		elsif edge['end']['@id'].match(/\/c\/en\/#{thing.gsub(' ', '_')}(\/n)?/) then
+		elsif edge['end']['@id'].match(/\/c\/en\/#{clean(thing)}(\/n)?/) then
 			# relationship of something else to our thing
 			case edge['rel']['@id']
 			when '/r/IsA'
