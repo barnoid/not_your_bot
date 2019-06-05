@@ -71,6 +71,8 @@ def parse_edges(edges, thing)
 				yourman << "has #{edge['end']['label']}"
 			when '/r/ReceivesAction'
 				yourman << "can be #{edge['end']['label']}"
+			when '/r/Synonym'
+				yourman << "can be called #{edge['end']['label']}"
 			end
 		elsif edge['end']['@id'].match(/\/c\/en\/#{clean(thing)}(\/n)?/) then
 			# relationship of something else to our thing
@@ -87,6 +89,8 @@ def parse_edges(edges, thing)
 				yourman << "has #{article(edge['start']['label'])}"
 			when '/r/HasPrerequisite'
 				yourman << "is required for #{edge['start']['label']}"
+			when '/r/Synonym'
+				yourman << "can be called #{edge['start']['label']}"
 			end
 		end
 
