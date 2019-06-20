@@ -9,6 +9,8 @@ if ARGV[0] == '-t' then
 	ARGV.shift
 end
 
+@languages = Hash[JSON.parse(File.open('language-codes.json').read).map { |l| [ l['alpha2'], l['English'].split(/;/).first ] }]
+
 # Number of time to retry on failure
 TRIES = 4
 
@@ -44,55 +46,76 @@ def parse_edges(edges, thing)
 
 		puts "#{edge['rel']['@id']} #{edge['start']['@id']} #{edge['end']['@id']} - #{edge['start']['label']} #{edge['rel']['label']} #{edge['end']['label']}" if @test
 
+		edgeout = nil
+
 		if edge['start']['@id'].match(/\/c\/en\/#{clean(thing)}(\/n)?/) then
 			# relationship of our thing to something else
 			case edge['rel']['@id']
 			when '/r/IsA'
-				yourman << "is #{article(edge['end']['label'])}"
+				edgeout = "is #{article(edge['end']['label'])}"
 			when '/r/AtLocation'
-				yourman << "can be found in #{edge['end']['label']}"
+				edgeout = "can be found in #{edge['end']['label']}"
 			when '/r/RelatedTo'
-				yourman << "is related to #{edge['end']['label']}"
+				edgeout = "is related to #{edge['end']['label']}"
 			when '/r/UsedFor'
-				yourman << "can be used for #{edge['end']['label']}"
+				edgeout = "can be used for #{edge['end']['label']}"
 			when '/r/CapableOf'
-				yourman << "can #{edge['end']['label']}"
+				edgeout = "can #{edge['end']['label']}"
 			when '/r/HasContext'
-				yourman << "is related to #{edge['end']['label']}"
+				edgeout = "is related to #{edge['end']['label']}"
 			when '/r/Causes'
-				yourman << "causes #{edge['end']['label']}"
+				edgeout = "causes #{edge['end']['label']}"
 			when '/r/DistinctFrom'
-				yourman << "is not #{edge['end']['label']}"
+				edgeout = "is not #{edge['end']['label']}"
 			when '/r/HasProperty'
-				yourman << "is #{edge['end']['label']}"
+				edgeout = "is #{edge['end']['label']}"
 			when '/r/PartOf'
-				yourman << "is part of #{edge['end']['label']}"
+				edgeout = "is part of #{edge['end']['label']}"
 			when '/r/HasA'
-				yourman << "has #{edge['end']['label']}"
+				edgeout = "has #{edge['end']['label']}"
 			when '/r/ReceivesAction'
-				yourman << "can be #{edge['end']['label']}"
+				edgeout = "can be #{edge['end']['label']}"
 			when '/r/Synonym'
-				yourman << "can be called #{edge['end']['label']}"
+				edgeout = "can be called #{edge['end']['label']}"
+			end
+
+			# ConceptNet is inconsistently capitalised
+			edgeout.downcase! if edgeout
+
+			if edgeout and not edge['end']['language'] == 'en' then
+				if @languages.has_key?(edge['end']['language']) then
+					edgeout += " in #{@languages[edge['end']['language']]}"
+				end
 			end
 		elsif edge['end']['@id'].match(/\/c\/en\/#{clean(thing)}(\/n)?/) then
 			# relationship of something else to our thing
 			case edge['rel']['@id']
 			when '/r/IsA'
-				yourman << "is #{article(edge['start']['label'])}"
+				edgeout = "is #{article(edge['start']['label'])}"
 			when '/r/AtLocation'
-				yourman << "can contain #{edge['start']['label']}"
+				edgeout = "can contain #{edge['start']['label']}"
 			when '/r/RelatedTo'
-				yourman << "is related to #{edge['start']['label']}"
+				edgeout = "is related to #{edge['start']['label']}"
 			when '/r/UsedFor'
-				yourman << "can be used for #{edge['start']['label']}"
+				edgeout = "can be used for #{edge['start']['label']}"
 			when '/r/PartOf'
-				yourman << "has #{article(edge['start']['label'])}"
+				edgeout = "has #{article(edge['start']['label'])}"
 			when '/r/HasPrerequisite'
-				yourman << "is required for #{edge['start']['label']}"
+				edgeout = "is required for #{edge['start']['label']}"
 			when '/r/Synonym'
-				yourman << "can be called #{edge['start']['label']}"
+				edgeout = "can be called #{edge['start']['label']}"
+			end
+
+			edgeout.downcase! if edgeout
+
+			if edgeout and not edge['start']['language'] == 'en' then
+				if @languages.has_key?(edge['start']['language']) then
+					edgeout += " in #{@languages[edge['start']['language']]}"
+				end
 			end
 		end
+
+		yourman << edgeout if edgeout
 
 	end
 	return yourman
@@ -134,10 +157,10 @@ if lines.empty? then
 end
 
 if @test then
-	out = lines.map{ |s| "- #{s.downcase}" }.join("\n")
+	out = lines.map{ |s| "- #{s}" }.join("\n")
 else
 	out  = "Ladies, if your man:\n\n"
-	out += lines.uniq.sample(5).map{ |s| "- #{s.downcase}" }.join("\n")
+	out += lines.uniq.sample(5).map{ |s| "- #{s}" }.join("\n")
 	out += "\n\nHe's not your man. He's #{article(thing)}."
 end
 
