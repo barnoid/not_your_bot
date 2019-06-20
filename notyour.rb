@@ -159,8 +159,11 @@ end
 if @test then
 	out = lines.map{ |s| "- #{s}" }.join("\n")
 else
+	selected_lines = lines.select { |m| not m.match(/can be called/) }
+	# select only one synonym line to avoid flooding with them
+	selected_lines += lines.select { |m| m.match(/can be called/) }.sample(1)
 	out  = "Ladies, if your man:\n\n"
-	out += lines.uniq.sample(5).map{ |s| "- #{s}" }.join("\n")
+	out += selected_lines.uniq.sample(5).map{ |s| "- #{s}" }.join("\n")
 	out += "\n\nHe's not your man. He's #{article(thing)}."
 end
 
