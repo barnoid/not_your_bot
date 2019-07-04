@@ -159,9 +159,14 @@ end
 if @test then
 	out = lines.map{ |s| "- #{s}" }.join("\n")
 else
-	selected_lines = lines.select { |m| not m.match(/can be called/) }
-	# select only one synonym line to avoid flooding with them
-	selected_lines += lines.select { |m| m.match(/can be called/) }.sample(1)
+	selected_lines = lines.select { |m| not ( m.match(/can be called .+ in .+/) or m.match(/in Serbo-Croatian/) ) }
+	synonym_lines = lines.select { |m| m.match(/can be called .+ in .+/) }
+	# ConceptNet seems to be full of Serbo-Croatian translations misfiled in
+	# RelatedTo instead of Synonym.
+	# Only include them some of the time to appear less obsessed
+	synonym_lines += lines.select { |m| m.match(/in Serbo-Croatian/) }.select { rand > 0.3 }
+	# select only one translation synonym line to avoid flooding with them
+	selected_lines += synonym_lines.sample(1)
 	out  = "Ladies, if your man:\n\n"
 	out += selected_lines.uniq.sample(5).map{ |s| "- #{s}" }.join("\n")
 	out += "\n\nHe's not your man. He's #{article(thing)}."
