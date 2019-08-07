@@ -1,8 +1,10 @@
 accordian
 actor
 aeroplane
+ai
 airport
 alligator
+android
 angle
 ant
 ape
@@ -46,6 +48,7 @@ bicycle
 bike
 bird
 biscuit
+bit
 blade
 blender
 board
@@ -72,11 +75,13 @@ burger
 bus
 butterfly
 button
+byte
 cabbage
 cable
 cake
 camel
 camera
+cameraphone
 card
 carriage
 cart
@@ -84,7 +89,9 @@ casserole
 cat
 cathedral
 cauliflower
+cell
 cello
+cellphone
 cemetery
 chain
 chair
@@ -114,7 +121,9 @@ comedian
 computer
 concept
 concert
+container
 cookie
+copier
 cord
 court
 cow
@@ -127,6 +136,7 @@ cupboard
 curtain
 cushion
 dance
+database
 deer
 dessert
 developer
@@ -152,6 +162,7 @@ face
 fact
 failure
 farm
+fax
 feather
 ferret
 ferry
@@ -162,6 +173,7 @@ finger
 fish
 flag
 floor
+flower
 flute
 fly
 foot
@@ -195,6 +207,7 @@ hand
 harmonica
 harp
 harpsichord
+hashtag
 hat
 head
 heart
@@ -212,6 +225,9 @@ icebox
 icon
 idea
 illusion
+ipad
+iphone
+ipod
 island
 jewel
 journey
@@ -252,6 +268,8 @@ magazine
 magician
 mango
 map
+markov chain
+markov model
 match
 meal
 meerkat
@@ -259,6 +277,7 @@ melon
 meme
 memory
 microwave
+mobile phone
 monitor
 monkey
 moon
@@ -267,6 +286,7 @@ motorbike
 mouse
 mouth
 movie
+mp3 player
 muscle
 museum
 mushroom
@@ -276,12 +296,15 @@ neck
 needle
 nerve
 net
+neural network
 noodle
 nose
 note
 notion
 number
 nut
+nybble
+object
 oboe
 octogon
 office
@@ -301,9 +324,11 @@ peach
 pear
 pen
 pencil
+people
 pepper
 performance
 phone
+photocopier
 photographer
 piano
 picture
@@ -323,8 +348,10 @@ pocket
 poem
 poet
 politician
+polygon
 pomegranate
 pool
+population
 possum
 pot
 potato
@@ -382,11 +409,13 @@ sign
 skin
 skunk
 sloth
+smartphone
 smile
 snail
 snake
 sock
 sofa
+solar system
 song
 soup
 spade
@@ -406,6 +435,7 @@ stocking
 stomach
 store
 strawberry
+stream
 street
 success
 sun
@@ -414,6 +444,7 @@ swan
 symbol
 synthesizer
 table
+tablet
 tail
 tapestry
 taxi
@@ -422,6 +453,7 @@ television
 temple
 test
 theatre
+thing
 thought
 thread
 throat
@@ -449,7 +481,9 @@ turnip
 tweet
 ukulele
 umbrella
+universe
 university
+vacuum
 van
 village
 violin
@@ -459,10 +493,12 @@ warning
 wasp
 watch
 website
+wedding
 whale
 wheel
 whip
 whistle
+wifi
 windmill
 window
 wing
